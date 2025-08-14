@@ -1,4 +1,3 @@
-import uvicorn
 from fastapi import FastAPI
 from starlette.responses import JSONResponse
 from services.data_loader import data_loader
@@ -11,6 +10,3 @@ app = FastAPI()
 def get_data():
     data = dal_obj.flex_query('GET * FROM DataLoaderDB', return_=True)
     return JSONResponse(data)
-
-if __name__ == 'main':
-    uvicorn.run(app,host='0.0.0.0',port=8000)
