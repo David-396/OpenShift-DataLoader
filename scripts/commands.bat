@@ -8,3 +8,5 @@ oc apply -f C:\Users\User\Desktop\OpenShift-DataLoader\infrastructure\k8s\mysql-
 oc new-app mysql:latest --env=MYSQL_USER=david --env=MYSQL_PASSWORD=pwd  --env=MYSQL_DATABASE=DataLoaderDB
 
 
+docker build -t dal-app .
+
