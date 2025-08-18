@@ -1,175 +1,35 @@
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: '2'
-    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"mysql:latest","namespace":"openshift"},"fieldPath":"spec.template.spec.containers[?(@.name==\"mysql\")].image"}]'
-    openshift.io/generated-by: OpenShiftNewApp
-  resourceVersion: '2515721669'
   name: mysql
-  uid: 94b79900-3724-4b79-afea-dae8d516fd83
-  creationTimestamp: '2025-08-14T10:36:39Z'
-  generation: 2
-  managedFields:
-    - manager: oc.exe
-      operation: Update
-      apiVersion: apps/v1
-      time: '2025-08-14T10:36:39Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            .: {}
-            'f:image.openshift.io/triggers': {}
-            'f:openshift.io/generated-by': {}
-          'f:labels':
-            .: {}
-            'f:app': {}
-            'f:app.kubernetes.io/component': {}
-            'f:app.kubernetes.io/instance': {}
-        'f:spec':
-          'f:progressDeadlineSeconds': {}
-          'f:replicas': {}
-          'f:revisionHistoryLimit': {}
-          'f:selector': {}
-          'f:strategy':
-            'f:rollingUpdate':
-              .: {}
-              'f:maxSurge': {}
-              'f:maxUnavailable': {}
-            'f:type': {}
-          'f:template':
-            'f:metadata':
-              'f:annotations':
-                .: {}
-                'f:openshift.io/generated-by': {}
-              'f:labels':
-                .: {}
-                'f:deployment': {}
-            'f:spec':
-              'f:containers':
-                'k:{"name":"mysql"}':
-                  .: {}
-                  'f:env':
-                    .: {}
-                    'k:{"name":"MYSQL_DATABASE"}':
-                      .: {}
-                      'f:name': {}
-                      'f:value': {}
-                    'k:{"name":"MYSQL_PASSWORD"}':
-                      .: {}
-                      'f:name': {}
-                      'f:value': {}
-                    'k:{"name":"MYSQL_USER"}':
-                      .: {}
-                      'f:name': {}
-                      'f:value': {}
-                  'f:imagePullPolicy': {}
-                  'f:name': {}
-                  'f:ports':
-                    .: {}
-                    'k:{"containerPort":3306,"protocol":"TCP"}':
-                      .: {}
-                      'f:containerPort': {}
-                      'f:protocol': {}
-                  'f:resources': {}
-                  'f:terminationMessagePath': {}
-                  'f:terminationMessagePolicy': {}
-              'f:dnsPolicy': {}
-              'f:restartPolicy': {}
-              'f:schedulerName': {}
-              'f:securityContext': {}
-              'f:terminationGracePeriodSeconds': {}
-    - manager: openshift-controller-manager
-      operation: Update
-      apiVersion: apps/v1
-      time: '2025-08-14T10:36:40Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:spec':
-          'f:template':
-            'f:spec':
-              'f:containers':
-                'k:{"name":"mysql"}':
-                  'f:image': {}
-    - manager: kube-controller-manager
-      operation: Update
-      apiVersion: apps/v1
-      time: '2025-08-14T10:36:42Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            'f:deployment.kubernetes.io/revision': {}
-        'f:status':
-          'f:availableReplicas': {}
-          'f:conditions':
-            .: {}
-            'k:{"type":"Available"}':
-              .: {}
-              'f:lastTransitionTime': {}
-              'f:lastUpdateTime': {}
-              'f:message': {}
-              'f:reason': {}
-              'f:status': {}
-              'f:type': {}
-            'k:{"type":"Progressing"}':
-              .: {}
-              'f:lastTransitionTime': {}
-              'f:lastUpdateTime': {}
-              'f:message': {}
-              'f:reason': {}
-              'f:status': {}
-              'f:type': {}
-          'f:observedGeneration': {}
-          'f:readyReplicas': {}
-          'f:replicas': {}
-          'f:updatedReplicas': {}
-      subresource: status
-  namespace: david-eini12-dev
   labels:
     app: mysql
-    app.kubernetes.io/component: mysql
-    app.kubernetes.io/instance: mysql
 spec:
   replicas: 1
   selector:
     matchLabels:
-      deployment: mysql
+      app: mysql
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        deployment: mysql
-      annotations:
-        openshift.io/generated-by: OpenShiftNewApp
+        app: mysql
     spec:
       containers:
         - name: mysql
-          image: 'image-registry.openshift-image-registry.svc:5000/openshift/mysql@sha256:18b26117161cf143c8b437fc3e5cadad1f65a4583cc9ea5fdf0b7c7b7b6eb81e'
+          image: mysql:8
           ports:
             - containerPort: 3306
-              protocol: TCP
           env:
             - name: MYSQL_DATABASE
               value: DataLoaderDB
-            - name: MYSQL_PASSWORD
-              value: pwd
             - name: MYSQL_USER
               value: david
-          resources: {}
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          imagePullPolicy: IfNotPresent
-      restartPolicy: Always
-      terminationGracePeriodSeconds: 30
-      dnsPolicy: ClusterFirst
-      securityContext: {}
-      schedulerName: default-scheduler
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 25%
-      maxSurge: 25%
-  revisionHistoryLimit: 10
-  progressDeadlineSeconds: 600
+            - name: MYSQL_PASSWORD
+              value: pwd
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc

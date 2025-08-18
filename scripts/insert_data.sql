@@ -1,0 +1,1 @@
+INSERT INTO project_table (name) VALUES ('David');

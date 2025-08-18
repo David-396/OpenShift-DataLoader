@@ -1,31 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    openshift.io/generated-by: OpenShiftNewApp
-  creationTimestamp: "2025-08-14T10:36:39Z"
+  name: mysql-svc
   labels:
     app: mysql
-    app.kubernetes.io/component: mysql
-    app.kubernetes.io/instance: mysql
-  name: mysql
-  namespace: david-eini12-dev
-  resourceVersion: "2515720748"
-  uid: 9672bdc4-f34b-4252-94fa-e98c1d58f54a
 spec:
-  clusterIP: 172.30.177.35
-  clusterIPs:
-  - 172.30.177.35
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-  - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-  - name: 3306-tcp
-    port: 3306
-    protocol: TCP
-    targetPort: 3306
   selector:
-    deployment: mysql
-  sessionAffinity: None
+    app: mysql
+  ports:
+    - name: 3306-tcp
+      port: 3306
+      protocol: TCP
+      targetPort: 3306
   type: ClusterIP
