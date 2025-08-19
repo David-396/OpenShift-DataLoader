@@ -1,6 +1,3 @@
-# login
-oc login --token=sha256~q7b_PyiOgziHZxRDnVdqnXEWsllyzi13vIMtD6_nHZk --server=https://api.rm2.thpm.p1.openshiftapps.com:6443
-
 # creating the new mysql app
 oc new-app mysql:latest --env=MYSQL_USER=david --env=MYSQL_PASSWORD=pwd  --env=MYSQL_DATABASE=DataLoaderDB
 
